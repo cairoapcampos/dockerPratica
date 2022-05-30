@@ -36,7 +36,7 @@ docker run -d -p 8080:3000 \
 -e "DB_USER=wikiuser" \
 -e "DB_PASS=wikipass" \
 -e "DB_NAME=wikidb" \
-ghcr.io/requarks/wiki:2
+requarks/wiki:2
 ```
 
 * Acesse o Wiki.js: `http://localhost:8080/`
