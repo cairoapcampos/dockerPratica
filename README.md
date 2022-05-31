@@ -273,10 +273,15 @@ docker volume create wikijs_config
 # Teste
 Hello, world! :beers:
 ```
+Como irá ficar:
+
+![alt text](https://github.com/cairoapcampos/dockerPratica/blob/main/img.png)
 
 * Remova os containers: `docker-compose down -v`
 
 * Crie os container novamente em background: `docker-compose up -d`
+
+Será que a mensagem criada ainda está lá ? 
 
 # Portainer
 
