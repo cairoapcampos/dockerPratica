@@ -267,6 +267,15 @@ docker volume create wikijs_config
 
 * Veja os logs: `docker-compose logs`
 
+* Acesse o container wikijsdb, visualize o seu ip e faça um teste de ping para o container wikijs:
+
+```
+docker-compose exec postgres /bin/bash
+ip a
+ping 172.28.0.3
+```
+**Obs:** `docker inspect network-wikijs` como visto anteriormente ajuda também a encontrar os ips de cada container. No Dockerfile o pacote `iproute2` instalou o comando `ip` e o pacote `iputils-ping` instalou o comando `ping`.
+
 * Acesse o Wiki.js (http://localhost:8080/)  e faça a configuração inicial. Depois criei uma página inicial em Markdown com o código abaixo e salve:
 
 ```
