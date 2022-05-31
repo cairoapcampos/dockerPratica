@@ -39,7 +39,50 @@ docker run -d -p 8080:3000 \
 requarks/wiki:2
 ```
 
+* Inspecione o container wikijsdb, o seu volume network-wikijs e a rede network-wikijs:
+
+```
+docker inspect wikijs
+docker inspect wikijsdb_data
+docker inspect network-wikijs
+```
+
+* Liste os containers criados: `docker ps` ou `docker container ls`
+
+* Liste os volumes criados: `docker volume ls`
+
+* Liste a rede criada: `docker network ls`
+
+* Liste as imagens baixadas: `docker image ls`
+
+* Crie e copie um arquivo para o `wikijsdb`: 
+
+```
+touch teste.txt
+docker cp teste.txt wikijsdb:/
+```
+
+* Acesse o container `wikijsdb`: `docker exec -it wikijsdb /bin/bash`
+
+* Veja o log do container `wikijs`: `docker container logs wikijs`
+
 * Acesse o Wiki.js: `http://localhost:8080/`
+
+* Remova os conatainers:
+
+```
+docker container stop wikijs wikijsdb
+docker container ls -a
+docker container stop wikijs wikijsdb
+```
+**Obs**: `docker container ls -a` e `docker ps -a` são equivalentes.
+
+* Remova os volumes: `docker volume rm wikijs_config wikijsdb_data`
+
+* Remova a rede criada: `docker network rm network-wikijs`
+
+* Remova as imagens: `docker image rm postgres:11-bullseye requarks/wiki:2`
+
 
 ## docker-compose
 
@@ -58,7 +101,7 @@ nano docker-compose.yml
 ```
 version: "3"
 services:
-  postgresql:
+  postgres:
     container_name: wikijsdb
     hostname: wikijsdb
     restart: always
@@ -83,13 +126,13 @@ services:
       - default
     environment:
       DB_TYPE: postgres
-      DB_HOST: postgresql
+      DB_HOST: postgres
       DB_PORT: 5432
       DB_USER: wikiuser
       DB_PASS: wikipass
       DB_NAME: wikidb
     depends_on:
-      - postgresql
+      - postgres
     image: requarks/wiki:2
 
 volumes:
@@ -101,7 +144,18 @@ networks:
    ```
 
 * Crie o container com volume e rede: `docker-compose up -d`
-* Remova o container, volumes e rede: `docker-compose down -v`
+
+* Liste os containers: docker-compose ps
+
+* Visualize os logs dos dois containers:
+
+```
+docker-compose logs postgres
+docker-compose logs wikijs
+```
+**Obs:** `docker-compose logs` possibilita visualizar logs de todos os containers criados.
+
+* Remova os containers, volumes e rede: `docker-compose down -v`
 
 **Atividade 2:**
 
@@ -135,6 +189,8 @@ services:
     container_name: wikijs
     hostname: wikijs
     restart: always
+    volumes:
+      - wikijs_config:/wiki/data/content
     networks: 
       - default
     env_file: .env_wikijs
@@ -145,12 +201,54 @@ services:
 volumes:
   wikijsdb_data:
     external: true
+  wikijs_config:
+    external: true
 
 networks:
  default:
   external:
    name: network-wikijs
    ```  
+ 
+* Dentro da mesma pasta crie o arquivo chamado `Dockerfile`: `nano Dockerfile`
+
+* Cole o seguinte conteúdo:
+
+```
+FROM postgres:11-bullseye
+LABEL maintainer="Cairo Aparecido Campos <cairoapcampos@gmail.com>"
+
+# Atualiza a lista de repositórios
+RUN apt-get update
+
+# Insta os pacotes necessários e remove pacotes desnecessários
+RUN apt-get install -y iproute2 iputils-ping \
+    && apt-get clean \
+    && apt-get autoremove \
+    && rm -rf /var/lib/apt/lists/*
+```
+
+* Dentro da mesma pasta crie o arquivo chamado `.env_postgres`: `nano .env_postgres`
+
+* Cole o seguinte conteúdo:
+
+```
+POSTGRES_DB=wikidb
+POSTGRES_PASSWORD=wikipass
+POSTGRES_USER=wikiuser
+```
+* Dentro da mesma pasta crie o arquivo chamado `.env_wikijs`: `nano .env_wikijs`
+
+* Cole o seguinte conteúdo:
+
+```
+DB_TYPE=postgres
+DB_HOST=wikijsdb
+DB_PORT=5432
+DB_USER=wikiuser
+DB_PASS=wikipass
+DB_NAME=wikidb
+```
 
 * Crie os volumes: 
 
@@ -163,9 +261,22 @@ docker volume create wikijs_config
 
 * Faça o build da imagem do PostgreSQL com base no Dockerfile: `docker-compose build`
 
+* Visualize a imagem criada: `docker image ls`
+
 * Crie os container em background: `docker-compose up -d`
 
 * Veja os logs: `docker-compose logs`
+
+* Acesse o Wiki.js (http://localhost:8080/)  e faça a configuração inicial. Depois criei uma página inicial em Markdown com o código abaixo e salve:
+
+```
+# Teste
+Hello, world! :beers:
+```
+
+* Remova os containers: `docker-compose down -v`
+
+* Crie os container novamente em background: `docker-compose up -d`
 
 # Portainer
 
