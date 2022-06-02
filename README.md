@@ -9,10 +9,16 @@ Repositório com exemplos de docker e docker-compose
 
 ```
 docker volume create wikijsdb_data
+```
+```
 docker volume create wikijs_config
 ```
 
-* Crie a rede utilizada:  `docker network create network-wikijs`
+* Crie a rede utilizada:
+
+```
+docker network create network-wikijs
+```
 
 ```
 docker run -d --name wikijsdb \
@@ -39,19 +45,42 @@ docker run -d -p 8080:3000 \
 requarks/wiki:2
 ```
 
-* Liste os containers criados: `docker ps` ou `docker container ls`
+* Liste os containers criados: 
+```
+docker ps
+```
+ou 
+```
+docker container ls
+```
 
-* Liste os volumes criados: `docker volume ls`
+* Liste os volumes criados: 
 
-* Liste a rede criada: `docker network ls`
+```
+docker volume ls
+```
 
-* Liste as imagens baixadas: `docker image ls`
+* Liste a rede criada: 
+
+```
+docker network ls
+```
+
+* Liste as imagens baixadas: 
+
+```
+docker image ls
+```
 
 * Inspecione o container wikijsdb, o seu volume e a sua rede:
 
 ```
 docker inspect wikijsdb
+```
+```
 docker inspect wikijsdb_data
+```
+```
 docker inspect network-wikijs
 ```
 
@@ -59,41 +88,77 @@ docker inspect network-wikijs
 
 ```
 touch teste.txt
+```
+```
 docker cp teste.txt wikijsdb:/
 ```
 
-* Acesse o container `wikijsdb`: `docker exec -it wikijsdb /bin/bash`
+* Acesse o container `wikijsdb`: 
 
-* Veja o log do container `wikijs`: `docker container logs wikijs`
+```
+docker exec -it wikijsdb /bin/bash
+```
 
-* Acesse o Wiki.js: `http://localhost:8080/`
+* Veja o log do container `wikijs`: 
+
+```
+docker container logs wikijs
+```
+
+* Acesse o Wiki.js: 
+
+```
+http://localhost:8080/
+```
 
 * Remova os conatainers:
 
 ```
 docker container stop wikijs wikijsdb
+```
+```
 docker container ls -a
+```
+```
 docker container rm wikijs wikijsdb
 ```
 **Obs**: `docker container ls -a` e `docker ps -a` são equivalentes.
 
-* Remova os volumes: `docker volume rm wikijs_config wikijsdb_data`
+* Remova os volumes: 
 
-* Remova a rede criada: `docker network rm network-wikijs`
+```
+docker volume rm wikijs_config wikijsdb_data
+```
 
-* Remova as imagens: `docker image rm postgres:11-bullseye requarks/wiki:2`
+* Remova a rede criada: 
+
+```
+docker network rm network-wikijs
+```
+
+* Remova as imagens: 
+
+```
+docker image rm postgres:11-bullseye requarks/wiki:2
+```
 
 
 ## docker-compose
 
 **Atividade 1:**
 
-* Crie uma pasta chamada `dev`: `mkdir dev`
+* Crie uma pasta chamada `dev`: 
+
+```
+mkdir dev
+```
 
 * Acesse a pasta e dentro dela crie o arquivo chamado `docker-compose.yml`:
 
 ```
 cd dev
+```
+```
 nano docker-compose.yml
 ```
 * Cole o seguinte conteúdo:
@@ -143,28 +208,48 @@ networks:
  default:
    ```
 
-* Crie o container com volume e rede: `docker-compose up -d`
+* Crie o container com volume e rede: 
 
-* Liste os containers: docker-compose ps
+```
+docker-compose up -d
+```
+
+* Liste os containers: 
+
+```
+docker-compose ps
+```
 
 * Visualize os logs dos dois containers:
 
 ```
 docker-compose logs postgres
+```
+```
 docker-compose logs wikijs
 ```
 **Obs:** `docker-compose logs` possibilita visualizar logs de todos os containers criados.
 
-* Remova os containers, volumes e rede: `docker-compose down -v`
+* Remova os containers, volumes e rede: 
+
+```
+docker-compose down -v
+```
 
 **Atividade 2:**
 
-* Crie uma pasta chamada `prod`: `mkdir prod`
+* Crie uma pasta chamada `prod`: 
+
+```
+mkdir prod
+```
 
 * Acesse a pasta e dentro dela crie o arquivo chamado `docker-compose.yml`:
 
 ```
 cd prod
+```
+```
 nano docker-compose.yml
 ```
 * Cole o seguinte conteúdo:
@@ -210,7 +295,11 @@ networks:
    name: network-wikijs
    ```  
  
-* Dentro da mesma pasta crie o arquivo chamado `Dockerfile`: `nano Dockerfile`
+* Dentro da mesma pasta crie o arquivo chamado `Dockerfile`: 
+
+```
+nano Dockerfile
+```
 
 * Cole o seguinte conteúdo:
 
@@ -228,7 +317,13 @@ RUN apt-get install -y iproute2 iputils-ping \
     && rm -rf /var/lib/apt/lists/*
 ```
 
-* Dentro da mesma pasta crie o arquivo chamado `.env_postgres`: `nano .env_postgres`
+**Obs:** No Dockerfile o pacote `iproute2` instalou o comando `ip` e o pacote `iputils-ping` instalou o comando `ping`.
+
+* Dentro da mesma pasta crie o arquivo chamado `.env_postgres`: 
+
+```
+nano .env_postgres
+```
 
 * Cole o seguinte conteúdo:
 
@@ -237,7 +332,11 @@ POSTGRES_DB=wikidb
 POSTGRES_PASSWORD=wikipass
 POSTGRES_USER=wikiuser
 ```
-* Dentro da mesma pasta crie o arquivo chamado `.env_wikijs`: `nano .env_wikijs`
+* Dentro da mesma pasta crie o arquivo chamado `.env_wikijs`: 
+
+```
+nano .env_wikijs
+```
 
 * Cole o seguinte conteúdo:
 
@@ -254,29 +353,71 @@ DB_NAME=wikidb
 
 ```
 docker volume create wikijsdb_data
+```
+```
 docker volume create wikijs_config
 ```
 
-* Crie a rede utilizada:  `docker network create network-wikijs`
+* Crie a rede utilizada:  
 
-* Faça o build da imagem do PostgreSQL com base no Dockerfile: `docker-compose build`
+```
+docker network create network-wikijs
+```
 
-* Visualize a imagem criada: `docker image ls`
+* Faça o build da imagem do PostgreSQL com base no Dockerfile: 
 
-* Crie os container em background: `docker-compose up -d`
+```
+docker-compose build
+```
 
-* Veja os logs: `docker-compose logs`
+* Visualize a imagem criada: 
+
+```
+docker image ls
+```
+
+* Crie os container em background: 
+
+```
+docker-compose up -d
+```
+
+* Veja os logs: 
+
+```
+docker-compose logs
+```
+
+* Acesse o container wikijsdb, visualize e copie o seu ip:
+
+```
+docker-compose exec wikijs /bin/bash
+```
+```
+ip a
+```
 
 * Acesse o container wikijsdb, visualize o seu ip e faça um teste de ping para o container wikijs:
 
 ```
 docker-compose exec postgres /bin/bash
-ip a
-ping 172.28.0.3
 ```
-**Obs:** `docker inspect network-wikijs` como visto anteriormente ajuda também a encontrar os ips de cada container. No Dockerfile o pacote `iproute2` instalou o comando `ip` e o pacote `iputils-ping` instalou o comando `ping`.
+```
+ip a
+```
+```
+ping ip
+```
 
-* Acesse o Wiki.js (http://localhost:8080/)  e faça a configuração inicial. Depois criei uma página inicial em Markdown com o código abaixo e salve:
+**Obs:** `docker inspect network-wikijs` como visto anteriormente ajuda também a encontrar os ips de cada container.
+
+* Acesse o Wiki.js e faça a configuração inicial. 
+
+```
+http://localhost:8080/
+```
+
+* Criei uma página inicial em Markdown com o código abaixo e salve:
 
 ```
 # Teste
@@ -286,9 +427,17 @@ Como irá ficar:
 
 ![alt text](https://github.com/cairoapcampos/dockerPratica/blob/main/img.png)
 
-* Remova os containers: `docker-compose down -v`
+* Remova os containers: 
 
-* Crie os container novamente em background: `docker-compose up -d`
+```
+docker-compose down -v
+```
+
+* Crie os container novamente em background reaproveitando os volumes e a rede: 
+
+```
+docker-compose up -d
+```
 
 Será que a mensagem criada ainda está lá ? 
 
@@ -296,7 +445,12 @@ Será que a mensagem criada ainda está lá ?
 
 **Atividade 1:**
 
-* Crie o volume: `docker volume create portainer_data`
+* Crie o volume: 
+
+```
+docker volume create portainer_data
+```
+
 * Crie o container:
 
 ```
@@ -307,6 +461,14 @@ docker run -d -p 8000:8000 -p 9443:9443 --name portainer \
     portainer/portainer-ce:2.13.1
 ```
 
-* Liste os containers em execucação: `docker container ls`
+* Liste os containers em execucação: 
 
-* Acesse o Portainer: `https://localhost:9443`
+```
+docker container ls
+```
+
+* Acesse o Portainer: 
+
+```
+https://localhost:9443
+```
