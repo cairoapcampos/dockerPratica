@@ -39,14 +39,6 @@ docker run -d -p 8080:3000 \
 requarks/wiki:2
 ```
 
-* Inspecione o container wikijsdb, o seu volume network-wikijs e a rede network-wikijs:
-
-```
-docker inspect wikijs
-docker inspect wikijsdb_data
-docker inspect network-wikijs
-```
-
 * Liste os containers criados: `docker ps` ou `docker container ls`
 
 * Liste os volumes criados: `docker volume ls`
@@ -54,6 +46,14 @@ docker inspect network-wikijs
 * Liste a rede criada: `docker network ls`
 
 * Liste as imagens baixadas: `docker image ls`
+
+* Inspecione o container wikijsdb, o seu volume e a sua rede:
+
+```
+docker inspect wikijsdb
+docker inspect wikijsdb_data
+docker inspect network-wikijs
+```
 
 * Crie e copie um arquivo para o `wikijsdb`: 
 
@@ -73,7 +73,7 @@ docker cp teste.txt wikijsdb:/
 ```
 docker container stop wikijs wikijsdb
 docker container ls -a
-docker container stop wikijs wikijsdb
+docker container rm wikijs wikijsdb
 ```
 **Obs**: `docker container ls -a` e `docker ps -a` são equivalentes.
 
